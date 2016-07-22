@@ -188,24 +188,25 @@ namespace Netsphere.Game.GameRules
                     break;
 
                 case GameRuleState.Result:
-                    foreach (var plr in Room.TeamManager.PlayersPlaying)
-                    {
-                        foreach (var @char in plr.CharacterManager)
-                        {
-                            var loss = (int)plr.RoomInfo.CharacterPlayTime[@char.Slot].TotalMinutes *
-                                       Config.Instance.Game.DurabilityLossPerMinute;
-                            loss += (int)plr.RoomInfo.Stats.Deaths * Config.Instance.Game.DurabilityLossPerDeath;
+					//ToDo - It seems that durability reduction is disconnecting players sometimes, must check
+                    //foreach (var plr in Room.TeamManager.PlayersPlaying)
+                    //{
+                    //    foreach (var @char in plr.CharacterManager)
+                    //    {
+                    //        var loss = (int)plr.RoomInfo.CharacterPlayTime[@char.Slot].TotalMinutes *
+                    //                   Config.Instance.Game.DurabilityLossPerMinute;
+                    //        loss += (int)plr.RoomInfo.Stats.Deaths * Config.Instance.Game.DurabilityLossPerDeath;
 
-                            foreach (var item in @char.Weapons.GetItems().Where(item => item != null && item.Durability != -1))
-                                item.LoseDurabilityAsync(loss).Wait();
+                    //        foreach (var item in @char.Weapons.GetItems().Where(item => item != null && item.Durability != -1))
+                    //            item.LoseDurabilityAsync(loss).Wait();
 
-                            foreach (var item in @char.Costumes.GetItems().Where(item => item != null && item.Durability != -1))
-                                item.LoseDurabilityAsync(loss).Wait();
+                    //        foreach (var item in @char.Costumes.GetItems().Where(item => item != null && item.Durability != -1))
+                    //            item.LoseDurabilityAsync(loss).Wait();
 
-                            foreach (var item in @char.Skills.GetItems().Where(item => item != null && item.Durability != -1))
-                                item.LoseDurabilityAsync(loss).Wait();
-                        }
-                    }
+                    //        foreach (var item in @char.Skills.GetItems().Where(item => item != null && item.Durability != -1))
+                    //            item.LoseDurabilityAsync(loss).Wait();
+                    //    }
+                    //}
 
                     foreach (var plr in Room.TeamManager.Players.Where(plr => plr.RoomInfo.State != PlayerState.Lobby))
                         plr.RoomInfo.State = PlayerState.Waiting;

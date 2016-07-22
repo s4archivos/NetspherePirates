@@ -54,14 +54,35 @@ namespace ProudNet.Services
             if (group == null || (session.HostId != message.A && session.HostId != message.B))
                 return;
 
-            var remotePeerA = (ServerRemotePeer)group.Members.GetValueOrDefault(message.A);
-            var remotePeerB = (ServerRemotePeer)group.Members.GetValueOrDefault(message.B);
+			ServerRemotePeer remotePeerA, remotePeerB;
+
+			//ToDo - exception ocurring here sometimes
+
+			try
+			{
+				remotePeerA = (ServerRemotePeer)group.Members.GetValueOrDefault(message.A);
+				remotePeerB = (ServerRemotePeer)group.Members.GetValueOrDefault(message.B);
+			}
+			catch(System.Exception)
+			{
+				remotePeerA = null;
+				remotePeerB = null;
+			}
 
             if (remotePeerA == null || remotePeerB == null)
                 return;
 
-            var stateA = remotePeerA.ConnectionStates.GetValueOrDefault(remotePeerB.HostId);
-            var stateB = remotePeerB.ConnectionStates.GetValueOrDefault(remotePeerA.HostId);
+			P2PConnectionState stateA, stateB;
+			try
+			{
+				stateA = remotePeerA.ConnectionStates.GetValueOrDefault(remotePeerB.HostId);
+				stateB = remotePeerB.ConnectionStates.GetValueOrDefault(remotePeerA.HostId);
+			}
+			catch(System.Exception)
+			{
+				stateA = null;
+				stateB = null;
+			}
 
             if (stateA == null || stateB == null)
                 return;

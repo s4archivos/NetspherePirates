@@ -268,17 +268,8 @@ namespace Netsphere.Network.Services
                         break;
 
                     case ItemPriceType.AP:
-                        if (plr.AP < price.Price)
-                        {
-                            session.Send(new SBuyItemAckMessage(ItemBuyResult.NotEnoughMoney));
-
-                            return;
-                        }
-                        plr.AP -= (uint)price.Price;
-                        break;
-
-                    case ItemPriceType.Premium:
-                        if (plr.AP < price.Price)
+					case ItemPriceType.Premium:
+						if (plr.AP < price.Price)
                         {
                             session.Send(new SBuyItemAckMessage(ItemBuyResult.NotEnoughMoney));
 

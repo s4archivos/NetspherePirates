@@ -404,9 +404,15 @@ namespace Netsphere.Network.Services
             room.Leave(targetPlr, message.Reason);
         }
 
-        #region Scores
+		[MessageHandler(typeof(CGetPlayerInfoReqMessage))]
+		public void CGetPlayerInfoReq(GameSession session, CGetPlayerInfoReqMessage message)
+		{
+			_logger.Debug("CGetPlayerInfoReqMessage - {1} : {0} : {2}", message.Unk, message.TargetHostId, message.SenderHostId);
+		}
 
-        [MessageHandler(typeof(CScoreKillReqMessage))]
+		#region Scores
+
+		[MessageHandler(typeof(CScoreKillReqMessage))]
         public void CScoreKillReq(GameSession session, CScoreKillReqMessage message)
         {
             var plr = session.Player;

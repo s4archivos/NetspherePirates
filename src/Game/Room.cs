@@ -27,7 +27,7 @@ namespace Netsphere
         private readonly AsyncLock _slotIdSync = new AsyncLock();
 
         private readonly ConcurrentDictionary<ulong, Player> _players = new ConcurrentDictionary<ulong, Player>();
-        private List<Player> _kickedPlayers = new List<Player>();
+        private List<ulong> _kickedPlayers = new List<ulong>();
         private readonly TimeSpan _hostUpdateTime = TimeSpan.FromSeconds(30);
         private readonly TimeSpan _changingRulesTime = TimeSpan.FromSeconds(5);
         private const uint PingDifferenceForChange = 20;
@@ -149,7 +149,7 @@ namespace Netsphere
             if (_players.Count >= Options.MatchKey.PlayerLimit)
                 throw new RoomLimitReachedException();
 
-            if (_kickedPlayers.Contains(plr))
+            if (_kickedPlayers.Contains(plr.Account.Id))
             {
                 plr.Session.Send(new SServerResultInfoAckMessage(ServerResult.CantEnterRoom));
                 return;
@@ -197,7 +197,7 @@ namespace Netsphere
             Broadcast(new SLeavePlayerAckMessage(plr.Account.Id, plr.Account.Nickname, roomLeaveReason));
 
             if (roomLeaveReason == RoomLeaveReason.Kicked)
-                _kickedPlayers.Add(plr);
+                _kickedPlayers.Add(plr.Account.Id);
 
             plr.RoomInfo.PeerId = 0;
             plr.RoomInfo.Team.Leave(plr);
